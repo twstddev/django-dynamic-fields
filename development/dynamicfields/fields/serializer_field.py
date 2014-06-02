@@ -36,7 +36,18 @@ class SerializerField( models.Field ):
 		return value
 
 	def get_db_prep_value( self, value, **kwargs ):
+		"""
+		Converts database value to a dictionary.
+		"""
 		if isinstance( value, basestring ):
 			return value
 		
 		return json.dumps( value )
+
+	def value_to_string( self, instance ):
+		"""
+		Prepares field output for serializers.
+		"""
+		value = self._get_val_from_obj( instance )
+
+		return self.get_db_prep_value( value )

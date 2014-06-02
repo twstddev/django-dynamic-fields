@@ -43,7 +43,7 @@ class SerializerFieldTestCase( TestCase ):
 		retrieved_object = TestModel.objects.get( id = self.m_test_model.id )
 		self.assertEqual( retrieved_object.custom_field, custom_data )
 
-	def test_model_allows_assigning_data_after_craetion( self ):
+	def test_model_allows_assigning_data_after_creation( self ):
 		"""
 		Make sure that meta data can be assigned after an object
 		has been created.
@@ -56,7 +56,7 @@ class SerializerFieldTestCase( TestCase ):
 		self.assertEqual( self.m_test_model.custom_field, another_data )
 
 		# Now test that retrieved model from database persists the value
-		retrieved_object = TestModel.objects.get( self.m_test_model.id )
+		retrieved_object = TestModel.objects.get( id = self.m_test_model.id )
 		self.assertEqual( retrieved_object.custom_field, another_data )
 		
 
