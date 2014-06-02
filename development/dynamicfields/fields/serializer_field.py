@@ -31,6 +31,12 @@ class SerializerField( models.Field ):
 		to a dictionary.
 		"""
 		if isinstance( value, basestring ):
-			return json.load( value )
+			return json.loads( value )
 
 		return value
+
+	def get_db_prep_value( self, value, **kwargs ):
+		if isinstance( value, basestring ):
+			return value
+		
+		return json.dumps( value )
