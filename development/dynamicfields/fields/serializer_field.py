@@ -15,7 +15,7 @@ class SerializerField( models.Field ):
 		It is done to avoid extra work on field
 		initialization in a model.
 		"""
-		kwargs[ "default" ] = ""
+		kwargs[ "default" ] = {}
 		kwargs[ "blank" ] = True
 		super( SerializerField, self ).__init__( *args, **kwargs )
 
