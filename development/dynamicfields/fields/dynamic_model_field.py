@@ -21,7 +21,7 @@ class DynamicModelField( SerializerField ):
 		a list of fields and accepts a form as a structure.
 		"""
 		defaults = {
-			"form_class" : DynamicFormFied,
+			"form_class" : DynamicFormField,
 			"form": self.form
 		}
 		defaults.update( kwargs )
