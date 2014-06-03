@@ -8,7 +8,7 @@ class CustomForm( forms.Form ):
 
 class ParentForm( forms.Form ):
 	field_here = forms.CharField( max_length = 255 )
-	nested_form = DynamicFormField( form = CustomForm )
+	nested_form = DynamicFormField( CustomForm )
 
 class DynamicFormFieldTestCase( TestCase ):
 	"""
@@ -38,14 +38,19 @@ class DynamicFormFieldTestCase( TestCase ):
 		Makes sure that nested values are returned.
 		"""
 		field = DynamicFormField( ParentForm, initial = self.m_nested_data );
-		self.assertEqual( field.clean( [ "somve_value", [ "name", "surname" ] ] ),  self.m_nested_data )
+		self.assertEqual( field.clean( [ "some_value", [ "name", "surname" ] ] ),  self.m_nested_data )
 
 	def test_validates_nested_fields( self ):
 		"""
-		Makes sure that any nested field validates.
+		Makes sure that nested fields are validating.
 		"""
 		form = ParentForm();
 		self.assertFalse( form.is_valid() )
 
-		form = ParentForm( self.m_nested_data )
+		form = ParentForm( { 
+			"field_here" : "some_value",
+			"nested_form_0" : "name",
+			"nested_form_1" : "surname",
+		} )
+		self.assertTrue( form.is_bound )
 		self.assertTrue( form.is_valid() )
