@@ -38,7 +38,7 @@ class DynamicFormFieldTestCase( TestCase ):
 		Makes sure that nested values are returned.
 		"""
 		field = DynamicFormField( ParentForm, initial = self.m_nested_data );
-		self.assertEqual( field.clean( [ "some_value", [ "name", "surname" ] ] ),  self.m_nested_data )
+		self.assertEqual( field.clean( [ "some_value", [ "surname", "name" ] ] ),  self.m_nested_data )
 
 	def test_validates_nested_fields( self ):
 		"""
@@ -53,4 +53,5 @@ class DynamicFormFieldTestCase( TestCase ):
 			"nested_form_1" : "surname",
 		} )
 		self.assertTrue( form.is_bound )
+		print form.errors.items()
 		self.assertTrue( form.is_valid() )
