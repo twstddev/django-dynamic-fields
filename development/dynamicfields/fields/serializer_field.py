@@ -15,9 +15,13 @@ class SerializerField( models.Field ):
 		It is done to avoid extra work on field
 		initialization in a model.
 		"""
-		kwargs[ "default" ] = {}
-		kwargs[ "blank" ] = True
-		super( SerializerField, self ).__init__( *args, **kwargs )
+		defaults = {
+			"blank" : True,
+			"default" : {},
+		}
+		defaults.update( kwargs )
+
+		super( SerializerField, self ).__init__( *args, **defaults )
 
 	def db_type( self, connection ):
 		"""
@@ -51,3 +55,9 @@ class SerializerField( models.Field ):
 		value = self._get_val_from_obj( instance )
 
 		return self.get_db_prep_value( value )
+
+try:
+	from south.modelsinspector import add_introspection_rules
+	add_introspection_rules( [], [ "^dynamicfields\.fields\.serializer_field\.SerializerField" ] )
+except ImportError:
+	pass
