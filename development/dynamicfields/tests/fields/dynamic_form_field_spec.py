@@ -44,7 +44,7 @@ class DynamicFormFieldTestCase( TestCase ):
 		"""
 		Makes sure that nested fields are validating.
 		"""
-		form = ParentForm();
+		form = ParentForm()
 		self.assertFalse( form.is_valid() )
 
 		form = ParentForm( { 
