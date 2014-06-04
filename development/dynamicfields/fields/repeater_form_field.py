@@ -9,10 +9,9 @@ class RepeaterFormField( forms.Field ):
 	removing nested forms.
 	"""
 	def __init__( self, form, **kwargs ):
-		initial = []
 		initial = kwargs[ "initial" ] if "initial" in kwargs else []
 
-		self.formset = formset_factory( form )( initial = initial, prefix = "suka" )
+		self.formset = formset_factory( form )
 		kwargs[ "widget" ] = RepeaterFieldWidget( self.formset )
 		self.fields = [ field for field in form()  ]
 
@@ -24,17 +23,18 @@ class RepeaterFormField( forms.Field ):
 		"""
 		if values:
 			converted_values = []
-
 			# Go through every nested form
 			for formset_values in values:
-				# Get a dictionary of the nested form fields
-				field_values = {
-					field.name : formset_values[ field_index ]
-					for field_index, field in enumerate( self.fields )
-				}
+				if formset_values:
+					# Get a dictionary of the nested form fields
+					field_values = {
+						field.name : formset_values[ field.name ]
+						for field_index, field in enumerate( self.fields )
+					}
 
-				converted_values.append( field_values )
+					converted_values.append( field_values )
 
 			return converted_values
 
 		return values
+

@@ -20,6 +20,11 @@ class CustomForm( forms.Form ):
 	slides = RepeaterFormField( ImageForm )
 
 # Create your models here.
+
 class TestModel( models.Model ):
 	main_name = models.CharField( max_length = 200 )
 	meta_field = DynamicModelField( form = CustomForm )
+
+class Comment( models.Model ):
+	title = models.CharField( max_length = 200 )
+	test = models.ForeignKey( TestModel )

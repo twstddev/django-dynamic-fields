@@ -7,6 +7,7 @@ class RepeaterFieldWidget( forms.Widget ):
 	forms as a stack and allows dynamically adding
 	and removing them.
 	"""
+	# This is a mostly copied admin template of stacked formset
 	m_template = "dynamicfields/repeater_field.html"
 
 	def __init__( self, formset, **kwargs ):
@@ -15,19 +16,19 @@ class RepeaterFieldWidget( forms.Widget ):
 		super( RepeaterFieldWidget, self ).__init__( kwargs )
 
 	def render( self, name, value, attrs = None ):
-		if "id" in attrs:
-			self.formset.prefix = attrs[ "id" ]
-
 		output = ""
 
+		suka = self.formset( initial = value, prefix = name )
+
 		template_data = {
-			"formset" : self.formset
+			"formset" : self.formset( initial = value, prefix = name )
 		}
 
 		output = render_to_string( self.m_template, template_data )
 
 		return output;
 
-	def value_from_datadict( self, data, files, name ):
-		#print data
-		return self.formset.__class__( data, files, prefix = name )
+	def value_from_datadict( self, data, files, prefix ):
+		loaded_formset = self.formset( data, files, prefix = prefix )
+		loaded_formset.is_valid()
+		return loaded_formset.cleaned_data
