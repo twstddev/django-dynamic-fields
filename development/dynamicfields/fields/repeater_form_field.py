@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.formsets import formset_factory
+from dynamicfields.widgets import RepeaterFieldWidget
 
 class RepeaterFormField( forms.Field ):
 	"""
@@ -11,8 +12,8 @@ class RepeaterFormField( forms.Field ):
 		initial = []
 		initial = kwargs[ "initial" ] if "initial" in kwargs else []
 
-		self.formset = formset_factory( form )( initial = initial )
-
+		self.formset = formset_factory( form )( initial = initial, prefix = "suka" )
+		kwargs[ "widget" ] = RepeaterFieldWidget( self.formset )
 		self.fields = [ field for field in form()  ]
 
 		super( RepeaterFormField, self ).__init__( **kwargs )

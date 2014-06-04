@@ -25,17 +25,17 @@ class DynamicFormField( forms.MultiValueField ):
 		converted_values = {}
 
 		if values:
-			converted_values = { 
-				field.name : values[ index ] 
-				if not isinstance( field.field, DynamicFormField ) 
-				else field.field.compress( values[ index ].values() )
-				for index, field in enumerate( self.form )
-			}
+                    converted_values = { 
+                            field.name : values[ index ] 
+                            if not isinstance( field.field, DynamicFormField ) 
+                            else field.field.compress( values[ index ].values() )
+                            for index, field in enumerate( self.form )
+                    }
 
-			validation_form = self.get_new_form_instance( converted_values )
-			validation_form.is_valid()
+                    validation_form = self.get_new_form_instance( converted_values )
+                    validation_form.is_valid()
 			
-			#converted_values.update( validation_form.cleaned_data )
+                    #converted_values.update( validation_form.cleaned_data )
 
 		return converted_values
 
