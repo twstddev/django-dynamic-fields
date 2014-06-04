@@ -14,6 +14,7 @@ class DynamicFormField( forms.MultiValueField ):
 		kwargs[ "initial" ] = [ field.field.initial for field in self.form ]
 		super( DynamicFormField, self ).__init__( **kwargs )
 
+                self.required = False
 		self.fields = [ field.field for field in self.form ]
 
 	def compress( self, values ):
@@ -30,11 +31,11 @@ class DynamicFormField( forms.MultiValueField ):
 				else field.field.compress( values[ index ].values() )
 				for index, field in enumerate( self.form )
 			}
-			
+
 			validation_form = self.get_new_form_instance( converted_values )
 			validation_form.is_valid()
 			
-			converted_values.update( validation_form.cleaned_data )
+			#converted_values.update( validation_form.cleaned_data )
 
 		return converted_values
 
@@ -43,19 +44,6 @@ class DynamicFormField( forms.MultiValueField ):
 		Validates nested form values and returns the validation
 		result.
 		"""
-		if values and isinstance( values, list ):
-			values_map = dict()
-
-			values_map = { 
-				field.name : values[ index ] 
-				for index, field in enumerate( self.form )
-			}
-
-			validation_form = self.get_new_form_instance( values_map )
-
-			if not validation_form.is_valid():
-				raise ValidationError( "Please check your nested fields" )
-
 		return super( DynamicFormField, self ).clean( values )
 
 	def get_new_form_instance( self, data ):

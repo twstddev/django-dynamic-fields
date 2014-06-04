@@ -53,5 +53,4 @@ class DynamicFormFieldTestCase( TestCase ):
 			"nested_form_1" : "surname",
 		} )
 		self.assertTrue( form.is_bound )
-		print form.errors.items()
 		self.assertTrue( form.is_valid() )

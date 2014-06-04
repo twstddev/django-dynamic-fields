@@ -1,18 +1,13 @@
 from django import forms
+from django.template.loader import render_to_string
 
 class DynamicFieldWidget( forms.MultiWidget ):
 	"""
 	Implements form widget that represents multiple
 	dynamic fields.
 	"""
+	m_template = "dynamicfields/dynamic_field.html"
 
-	field_template = """
-	<div style="clear: both; padding: 1em 0;">
-		<label for="%s" %s>%s</label>
-		%s
-	</div>
-	<hr />
-	"""
 	def __init__( self, fields, **kwargs ):
 		self.fields = fields
 
@@ -28,21 +23,30 @@ class DynamicFieldWidget( forms.MultiWidget ):
 		of values %).
 		"""
 		if values:
-			return [ values[ field.name ] for field in self.fields ]
+			return [ values.get( field.name ) for field in self.fields ]
 		return [ field.field.initial for field in self.fields ]
 
 	def format_output( self, rendered_widgets ):
-		output = []
+		"""
+		Generates a HTML representation of dynamicformfield.
+		"""
+		output = "" 
 
 		for index, field in enumerate( self.fields ):
 			current_widget = rendered_widgets[ index ]
 
-			compiled_template = self.field_template % (
-				field.name,
-				field.field.required,
-				field.label,
-				current_widget
-			)
-			output.append( compiled_template ) 
-		return "".join( output )
+			classes = []
+
+			if field.field.required:
+				classes.append( "required" )
+
+			template_data = {
+				"label_classes" : " ".join( classes ),
+				"field" : field,
+				"widget" : current_widget,
+			}
+
+			output += render_to_string( self.m_template, template_data )
+
+		return output
 
